@@ -24,10 +24,46 @@ export default function SavedBills({ bills, settings, onOpen, onDuplicate, onDel
 
   const sorted = [...bills].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
 
+  function confirmDelete(bill: Bill) {
+    if (confirm('Delete bill ' + bill.billNumber + '? This cannot be undone.')) {
+      onDelete(bill)
+    }
+  }
+
   return (
     <div>
       <h2 className="text-lg font-semibold mb-4">Saved Bills ({bills.length})</h2>
-      <div className="overflow-x-auto">
+
+      {/* Card list: small screens, where a wide table would clip the actions column off-screen */}
+      <div className="space-y-3 sm:hidden">
+        {sorted.map((bill) => (
+          <div key={bill.id} className="border border-slate-200 rounded-md p-3">
+            <div className="flex justify-between items-start">
+              <div className="font-medium">{bill.billNumber}</div>
+              <div className="font-semibold">₹{formatINR(bill.total)}</div>
+            </div>
+            <div className="text-sm text-slate-600 mt-1">{bill.recipientName}</div>
+            <div className="text-xs text-slate-400 mt-0.5">{formatDate(bill.date, settings.dateFormat)}</div>
+            <div className="flex gap-2 flex-wrap mt-3">
+              <button className="btn-secondary" onClick={() => onOpen(bill)}>
+                Open
+              </button>
+              <button className="btn-secondary" onClick={() => onDuplicate(bill)}>
+                Duplicate
+              </button>
+              <button className="btn-secondary" onClick={() => onDownload(bill)}>
+                Download PDF
+              </button>
+              <button className="btn-danger" onClick={() => confirmDelete(bill)}>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Table: sm screens and up */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="text-left text-slate-500 border-b border-slate-200">
@@ -56,14 +92,7 @@ export default function SavedBills({ bills, settings, onOpen, onDuplicate, onDel
                     <button className="btn-secondary" onClick={() => onDownload(bill)}>
                       Download PDF
                     </button>
-                    <button
-                      className="btn-danger"
-                      onClick={() => {
-                        if (confirm('Delete bill ' + bill.billNumber + '? This cannot be undone.')) {
-                          onDelete(bill)
-                        }
-                      }}
-                    >
+                    <button className="btn-danger" onClick={() => confirmDelete(bill)}>
                       Delete
                     </button>
                   </div>

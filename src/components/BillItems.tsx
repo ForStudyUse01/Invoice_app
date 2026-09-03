@@ -31,35 +31,42 @@ export default function BillItems({ items, onChange }: Props) {
         </button>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3 sm:space-y-2">
         {items.map((item, idx) => (
-          <div key={item.id} className="flex gap-2 items-start">
-            <div className="w-8 pt-2 text-sm text-slate-500 text-center">{idx + 1}</div>
-            <input
-              className="field-input flex-1"
-              placeholder="Description"
-              value={item.description}
-              onChange={(e) => update(item.id, { description: e.target.value })}
-            />
-            <input
-              className="field-input w-32"
-              type="number"
-              inputMode="decimal"
-              step="0.01"
-              min={0}
-              placeholder="Amount"
-              value={item.amount || ''}
-              onChange={(e) => update(item.id, { amount: parseFloat(e.target.value) || 0 })}
-            />
-            <button
-              type="button"
-              className="btn-danger px-2"
-              aria-label="Delete item"
-              onClick={() => removeItem(item.id)}
-              disabled={items.length === 1}
-            >
-              ✕
-            </button>
+          <div
+            key={item.id}
+            className="flex flex-col sm:flex-row gap-2 sm:items-start pb-3 sm:pb-0 border-b border-slate-100 sm:border-0 last:border-0"
+          >
+            <div className="flex gap-2 items-start flex-1 min-w-0">
+              <div className="w-6 pt-2 text-sm text-slate-500 text-center shrink-0">{idx + 1}</div>
+              <input
+                className="field-input flex-1 min-w-0"
+                placeholder="Description"
+                value={item.description}
+                onChange={(e) => update(item.id, { description: e.target.value })}
+              />
+            </div>
+            <div className="flex gap-2 items-start pl-8 sm:pl-0 shrink-0">
+              <input
+                className="field-input w-full sm:w-32"
+                type="number"
+                inputMode="decimal"
+                step="0.01"
+                min={0}
+                placeholder="Amount"
+                value={item.amount || ''}
+                onChange={(e) => update(item.id, { amount: parseFloat(e.target.value) || 0 })}
+              />
+              <button
+                type="button"
+                className="btn-danger px-2 shrink-0"
+                aria-label="Delete item"
+                onClick={() => removeItem(item.id)}
+                disabled={items.length === 1}
+              >
+                ✕
+              </button>
+            </div>
           </div>
         ))}
       </div>

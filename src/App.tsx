@@ -12,6 +12,7 @@ import BillForm from './components/BillForm'
 import InvoicePreview from './components/InvoicePreview'
 import SavedBills from './components/SavedBills'
 import SettingsPanel from './components/SettingsPanel'
+import ScaledPreview from './components/ScaledPreview'
 
 type Tab = 'bill' | 'profile' | 'saved' | 'settings'
 
@@ -157,7 +158,11 @@ export default function App() {
           <p className="text-xs text-slate-500 mt-0.5">
             Runs entirely in your browser. Your data is stored locally on this device.
           </p>
-          <nav className="flex gap-1 mt-4" role="tablist" aria-label="Main">
+          <nav
+            className="flex gap-1 mt-4 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0"
+            role="tablist"
+            aria-label="Main"
+          >
             {tabs.map((t) => (
               <button
                 key={t.id}
@@ -165,7 +170,7 @@ export default function App() {
                 aria-selected={tab === t.id}
                 onClick={() => setTab(t.id)}
                 className={
-                  'px-4 py-2 text-sm font-medium rounded-t-md border-b-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ' +
+                  'shrink-0 whitespace-nowrap px-3 sm:px-4 py-2 text-sm font-medium rounded-t-md border-b-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ' +
                   (tab === t.id
                     ? 'border-blue-600 text-blue-700'
                     : 'border-transparent text-slate-500 hover:text-slate-800')
@@ -191,8 +196,10 @@ export default function App() {
                 onNew={handleNewBill}
               />
             </div>
-            <div className="overflow-auto">
-              <InvoicePreview bill={draft} profile={profile} settings={settings} />
+            <div>
+              <ScaledPreview>
+                <InvoicePreview bill={draft} profile={profile} settings={settings} />
+              </ScaledPreview>
             </div>
           </div>
         )}
